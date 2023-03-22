@@ -1,0 +1,36 @@
+.loginContainer {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+
+  .paper {
+    padding: 50px;
+
+    .title {
+      text-align: center;
+    }
+
+    //.block {
+    //  display: flex;
+    //  flex-direction: row;
+    //
+    //  width: 100%;
+    //  color: #777777;
+    //  margin-top: 30px;
+    //
+    //  .linebreak {
+    //    width: 45%;
+    //  }
+    //
+    //  .title {
+    //    text-align: center;
+    //    width: 10%;
+    //  }
+    //}
+    //
+    .button {
+      width: 100%;
+      margin-top: 20px;
+    }
+  }
+}
