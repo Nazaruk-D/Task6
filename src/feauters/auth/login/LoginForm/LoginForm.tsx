@@ -17,7 +17,7 @@ const LoginForm = () => {
         validate: (values) => {
             const errors: any = {}
             if (!values.name) {
-                errors.password = 'Invalid password'
+                errors.name = 'Name Required'
             }
             return errors
         },
@@ -28,7 +28,7 @@ const LoginForm = () => {
     })
 
     function onClickHandler() {
-        dispatch(setIsisRegisteredAC({value: false}))
+        // dispatch(setIsisRegisteredAC({value: false}))
         // navigate(routes.registration)
     }
 
@@ -45,7 +45,7 @@ const LoginForm = () => {
                                 <TextField
                                     label="name"
                                     margin="normal"
-                                    {...formik.getFieldProps('email')}
+                                    {...formik.getFieldProps('name')}
                                 />
                                 {formik.touched.name && formik.errors.name &&
                                     <div style={{color: "red"}}>{formik.errors.name}</div>}

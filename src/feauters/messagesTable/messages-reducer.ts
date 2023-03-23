@@ -2,13 +2,13 @@ import {AxiosError} from "axios";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {UserType} from "../../api/authAPI";
 import {setAppStatusAC} from "../../app/app-reducer";
-import {usersAPI} from "../../api/usersAPI";
 import {handleServerNetworkError} from "../../utils/error-utils";
+import {messageAPI, MessageType} from "../../api/messageAPI";
 
 
 export const fetchMessagesTC = createAsyncThunk(('messages/fetch'), async (param, {dispatch, rejectWithValue}) => {
     dispatch(setAppStatusAC({status: 'loading'}))
-    const res = await usersAPI.fetchMessages()
+    const res = await messageAPI.fetchMessages()
     try {
         dispatch(setAppStatusAC({status: 'succeeded'}))
         return {users: res.data}
@@ -24,44 +24,29 @@ export const fetchMessagesTC = createAsyncThunk(('messages/fetch'), async (param
     }
 })
 
-// export const changeStatusUsersTC = createAsyncThunk(('auth/changeStatus'), async (param: { ids: number[], status: string }, thunkAPI) => {
-//     thunkAPI.dispatch(setAppStatusAC({status: 'loading'}))
-//     try {
-//         const res = await usersAPI.changeStatusUsers(param)
-//         thunkAPI.dispatch(setAppStatusAC({status: 'succeeded'}))
-//         console.log(res.data)
-//         return {value: res.data}
-//     } catch (err: any) {
-//         const error: AxiosError = err.response.data
-//         handleServerNetworkError(error, thunkAPI.dispatch)
-//         return thunkAPI.rejectWithValue({errors: [error.message], fieldErrors: undefined})
-//     } finally {
-//         thunkAPI.dispatch(setAppStatusAC({status: 'idle'}))
-//     }
-// })
-//
-// export const deleteUsersTC = createAsyncThunk(('auth/delete'), async (param: { ids: number[] }, thunkAPI) => {
-//     thunkAPI.dispatch(setAppStatusAC({status: 'loading'}))
-//     try {
-//         const res = await usersAPI.deleteUsers(param)
-//         thunkAPI.dispatch(setAppStatusAC({status: 'succeeded'}))
-//         return res.data.ids
-//     } catch (err: any) {
-//         const error: AxiosError = err.response.data
-//         handleServerNetworkError(error, thunkAPI.dispatch)
-//         return thunkAPI.rejectWithValue({errors: [error.message], fieldErrors: undefined})
-//     } finally {
-//         thunkAPI.dispatch(setAppStatusAC({status: 'idle'}))
-//     }
-// })
+
+export const sendMessageTC = createAsyncThunk(('messages/send'), async (param: MessageType, thunkAPI) => {
+    thunkAPI.dispatch(setAppStatusAC({status: 'loading'}))
+    try {
+        const res = await messageAPI.sendMessages(param)
+        thunkAPI.dispatch(setAppStatusAC({status: 'succeeded'}))
+        return res.data
+    } catch (err: any) {
+        const error: AxiosError = err.response.data
+        handleServerNetworkError(error, thunkAPI.dispatch)
+        return thunkAPI.rejectWithValue({errors: [error.message], fieldErrors: undefined})
+    } finally {
+        thunkAPI.dispatch(setAppStatusAC({status: 'idle'}))
+    }
+})
 
 const slice = createSlice({
         name: "messages",
         initialState: [] as DomainMessagesType[],
         reducers: {
             changeMessagesStatusAC(state, action: PayloadAction<{ id: number, status: boolean }>) {
-                const index = state.findIndex(u => u.id === action.payload.id)
-                state[index].isSelected = action.payload.status
+                // const index = state.findIndex(u => u.id === action.payload.id)
+                // state[index].isSelected = action.payload.status
             },
             changeAllMessagesStatusAC(state, action) {
                 return state.map(u => ({...u, isSelected: action.payload}))

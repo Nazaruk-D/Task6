@@ -7,19 +7,19 @@ import {initializeAppTC} from "./app-reducer";
 import {CircularProgress} from "@mui/material";
 
 function App() {
-    // const dispatch = useAppDispatch()
-    // const isInitialized = useAppSelector(s => s.app.initialized)
-    //
-    // useEffect(() => {
-    //     dispatch(initializeAppTC())
-    // }, [dispatch])
-    //
-    // if (!isInitialized) {
-    //     return <div
-    //         style={{position: 'fixed', top: '45%', textAlign: 'center', width: '100%'}}>
-    //         <CircularProgress/>
-    //     </div>
-    // }
+    const dispatch = useAppDispatch()
+    const isInitialized = useAppSelector(s => s.app.initialized)
+
+    useEffect(() => {
+        dispatch(initializeAppTC())
+    }, [dispatch])
+
+    if (!isInitialized) {
+        return <div
+            style={{position: 'fixed', top: '45%', textAlign: 'center', width: '100%'}}>
+            <CircularProgress/>
+        </div>
+    }
 
   return (
       <div className={s.appContainer}>

@@ -32,12 +32,10 @@ export type LoginDataType = {
 }
 
 export type UserType = {
-    id: number
     name: string
     messages: []
 }
 
 export type MeType = {
-    id: number
     name: string
 }

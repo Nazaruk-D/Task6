@@ -11,7 +11,7 @@ const Login = () => {
     const navigate = useNavigate()
     const isLoggedIn = useAppSelector(s => s.auth.isLoggedIn)
 
-    // if (isLoggedIn) navigate(routes.mainPage)
+    if (isLoggedIn) navigate(routes.mainPage)
 
     return (
         <>

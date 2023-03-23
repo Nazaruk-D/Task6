@@ -9,7 +9,7 @@ export const initializeAppTC = createAsyncThunk(('app/initializeApp'), async (pa
         if (res.status === 200) {
             dispatch(setAppStatusAC({status: 'loading'}))
             dispatch(setIsLoggedInAC({value: true}));
-            dispatch(setUserId({id: res.data.data.id}));
+            dispatch(setUserName({name: res.data.data.name}));
             return
         } else {
             handleServerAppError(res.data.message[0], dispatch)
@@ -30,15 +30,15 @@ const slice = createSlice({
     initialState: {
         status: 'loading' as RequestStatusType,
         initialized: false,
-        userId: null as null | number,
+        userName: "" as string,
         error: null as null | string,
     },
     reducers: {
         setAppStatusAC(state, action: PayloadAction<{ status: RequestStatusType }>) {
             state.status = action.payload.status
         },
-        setUserId(state, action: PayloadAction<{ id: number }>) {
-            state.userId = action.payload.id
+        setUserName(state, action: PayloadAction<{ name: string }>) {
+            state.userName = action.payload.name
         },
         setAppErrorAC(state, action: PayloadAction<{ message: null | string }>) {
             state.error = action.payload.message
@@ -52,7 +52,7 @@ const slice = createSlice({
 })
 
 export const appReducer = slice.reducer;
-export const {setAppStatusAC, setUserId, setAppErrorAC} = slice.actions;
+export const {setAppStatusAC, setUserName, setAppErrorAC} = slice.actions;
 export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
 
 
