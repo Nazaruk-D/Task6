@@ -3,15 +3,15 @@ import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {UserType} from "../../api/authAPI";
 import {setAppStatusAC} from "../../app/app-reducer";
 import {handleServerNetworkError} from "../../utils/error-utils";
-import {messageAPI, MessageType} from "../../api/messageAPI";
+import {messageAPI, MessageType, SendMessageType} from "../../api/messageAPI";
 
 
-export const fetchMessagesTC = createAsyncThunk(('messages/fetch'), async (param, {dispatch, rejectWithValue}) => {
+export const fetchMessagesTC = createAsyncThunk(('messages/fetch'), async (param: string, {dispatch, rejectWithValue}) => {
     dispatch(setAppStatusAC({status: 'loading'}))
-    const res = await messageAPI.fetchMessages()
+    const res = await messageAPI.fetchMessages(param)
     try {
         dispatch(setAppStatusAC({status: 'succeeded'}))
-        return {users: res.data}
+        return res.data
     } catch (err: any) {
         dispatch(setAppStatusAC({status: 'failed'}))
         const error: AxiosError = err
@@ -25,7 +25,7 @@ export const fetchMessagesTC = createAsyncThunk(('messages/fetch'), async (param
 })
 
 
-export const sendMessageTC = createAsyncThunk(('messages/send'), async (param: MessageType, thunkAPI) => {
+export const sendMessageTC = createAsyncThunk(('messages/send'), async (param: SendMessageType, thunkAPI) => {
     thunkAPI.dispatch(setAppStatusAC({status: 'loading'}))
     try {
         const res = await messageAPI.sendMessages(param)
@@ -42,7 +42,7 @@ export const sendMessageTC = createAsyncThunk(('messages/send'), async (param: M
 
 const slice = createSlice({
         name: "messages",
-        initialState: [] as DomainMessagesType[],
+        initialState: [] as MessageType[],
         reducers: {
             changeMessagesStatusAC(state, action: PayloadAction<{ id: number, status: boolean }>) {
                 // const index = state.findIndex(u => u.id === action.payload.id)
@@ -54,6 +54,9 @@ const slice = createSlice({
         },
         extraReducers: builder => {
             builder.addCase(fetchMessagesTC.fulfilled, (state, action) => {
+                return action.payload
+                // return action.payload.map( m => m)
+                // console.log(action.payload)
                 // return action.payload.users.map(u => ({...u, isSelected: false}))
             })
             // builder.addCase(changeStatusUsersTC.fulfilled, (state, action: PayloadAction<{ value: { ids: number[], status: any } }>) => {
@@ -71,4 +74,3 @@ const slice = createSlice({
 export const messagesReducer = slice.reducer;
 export const {changeMessagesStatusAC, changeAllMessagesStatusAC} = slice.actions;
 
-export type DomainMessagesType = UserType & { isSelected: boolean }

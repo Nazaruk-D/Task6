@@ -1,11 +1,12 @@
 import React from 'react';
-// import dateFormat from "dateformat";
-import {Checkbox, TableCell, TableRow} from "@mui/material";
+import dateFormat from "dateformat";
+import {TableCell, TableRow} from "@mui/material";
 import {useAppDispatch} from "../../../../app/store/store";
-import {changeMessagesStatusAC, DomainMessagesType} from "../../messages-reducer";
+import {changeMessagesStatusAC} from "../../messages-reducer";
+import {MessageType} from "../../../../api/messageAPI";
 
 type RowPropsType = {
-    row: DomainMessagesType
+    row: MessageType
 }
 
 const Row: React.FC<RowPropsType> = ({row}) => {
@@ -21,13 +22,13 @@ const Row: React.FC<RowPropsType> = ({row}) => {
                     {/*<Checkbox checked={row.isSelected} onChange={() => onChangeHandler(row.id, !row.isSelected)} />*/}
                 </TableCell>
                 <TableCell component="th" scope="row">
-                    {row.name}
+                    {row.sender_name}
                 </TableCell>
                 <TableCell component="th" scope="row">
-                    Subject
+                    {row.subject}
                 </TableCell>
                 <TableCell component="th" scope="row">
-                    Time
+                    {dateFormat(row.created_at, "mmmm dS, yyyy, h:MM:ss TT")}
                 </TableCell>
             </TableRow>
     );
