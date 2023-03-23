@@ -1,16 +1,15 @@
 import React, {FC} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
-import {Button, Modal, TextField, Typography, Grid,} from '@material-ui/core';
+import {Button, Grid, Modal, TextField, Typography,} from '@material-ui/core';
 import {useFormik} from "formik";
 import SendIcon from '@mui/icons-material/Send';
-import {useModal} from "../../hooks/useModal";
-import CustomTable from "../../feauters/messagesTable/CustomTable/CustomTable";
 import {sendMessageTC} from "../../feauters/messagesTable/messages-reducer";
 import {useAppDispatch, useAppSelector} from "../../app/store/store";
 import {selectorNameUser} from "../../app/store/selector/selectorApp";
 
 
 type SendFormModalPropsType = {
+    ws: WebSocket | null
     openModal: boolean
     setOpenModal: (openModal: boolean) => void
 }
@@ -32,10 +31,30 @@ const useStyles = makeStyles((theme: any) => ({
     },
 }));
 
-const SendFormModal: FC<SendFormModalPropsType> = ({openModal, setOpenModal}) => {
+const SendFormModal: FC<SendFormModalPropsType> = ({openModal, setOpenModal, ws}) => {
     const dispatch = useAppDispatch()
     const userName = useAppSelector(selectorNameUser)
     const classes = useStyles();
+
+
+    // const [ws, setWS] = useState<any>(null)
+    //
+    // if (ws) {
+    //     ws.onmessage = (messageEvent: any) => {
+    //         // let messages = JSON.parse(messageEvent.data)
+    //         // console.log(messages)
+    //         console.log(messageEvent.data)
+    //     }
+    // }
+    //
+    // useEffect(() => {
+    //     const socket = new WebSocket('ws://localhost:8080');
+    //     setWS(socket)
+    // }, [])
+
+    // const addNewMessageWS = (values: string) => {
+    //     ws.send(values)
+    // }
 
 
     const formik = useFormik({
@@ -58,8 +77,11 @@ const SendFormModal: FC<SendFormModalPropsType> = ({openModal, setOpenModal}) =>
             return errors
         },
         onSubmit: values => {
-            dispatch(sendMessageTC({senderName: userName, recipientName: values.recipient, subject: values.subject, message: values.message}))
-            console.log(values)
+            // dispatch(sendMessageTC({senderName: userName, recipientName: values.recipient, subject: values.subject, message: values.message}))
+            const newObj = {senderName: userName, recipientName: values.recipient, subject: values.subject, message: values.message}
+            ws!.send(JSON.stringify({action: 'sendMessage', userName, newObj}))
+            // dispatch(sendMessageTC())
+            setOpenModal(false)
             formik.resetForm()
         },
     })

@@ -3,6 +3,7 @@ import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {authAPI, LoginDataType, RegistrationDataType} from "../../api/authAPI";
 import {initializeAppTC, setAppStatusAC, setUserName} from "../../app/app-reducer";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
+import {clearMessages} from "../messagesTable/messages-reducer";
 
 
 export const loginTC = createAsyncThunk<undefined, LoginDataType, { rejectValue: { errors: Array<string>, fieldErrors?: Array<any> } }>(('auth/login'), async (param: LoginDataType, thunkAPI) => {
@@ -33,6 +34,7 @@ export const logoutTC = createAsyncThunk(('auth/logout'), async (param, thunkAPI
         const res = await authAPI.logout()
         if (res.statusCode === 200) {
             thunkAPI.dispatch(setIsisRegisteredAC({value: false}))
+            thunkAPI.dispatch(clearMessages())
             thunkAPI.dispatch(setAppStatusAC({status: 'succeeded'}))
             return
         } else {

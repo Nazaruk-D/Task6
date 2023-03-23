@@ -6,23 +6,23 @@ import {handleServerNetworkError} from "../../utils/error-utils";
 import {messageAPI, MessageType, SendMessageType} from "../../api/messageAPI";
 
 
-export const fetchMessagesTC = createAsyncThunk(('messages/fetch'), async (param: string, {dispatch, rejectWithValue}) => {
-    dispatch(setAppStatusAC({status: 'loading'}))
-    const res = await messageAPI.fetchMessages(param)
-    try {
-        dispatch(setAppStatusAC({status: 'succeeded'}))
-        return res.data
-    } catch (err: any) {
-        dispatch(setAppStatusAC({status: 'failed'}))
-        const error: AxiosError = err
-        // console.log(error)
-        // return rejectWithValue({})
-        handleServerNetworkError(error, dispatch)
-        return rejectWithValue(null)
-    } finally {
-        dispatch(setAppStatusAC({status: 'idle'}))
-    }
-})
+// export const fetchMessagesTC = createAsyncThunk(('messages/fetch'), async (param: string, {dispatch, rejectWithValue}) => {
+//     dispatch(setAppStatusAC({status: 'loading'}))
+//     // const res = await messageAPI.fetchMessages(param)
+//     try {
+//         dispatch(setAppStatusAC({status: 'succeeded'}))
+//         return res.data
+//     } catch (err: any) {
+//         dispatch(setAppStatusAC({status: 'failed'}))
+//         const error: AxiosError = err
+//         // console.log(error)
+//         // return rejectWithValue({})
+//         handleServerNetworkError(error, dispatch)
+//         return rejectWithValue(null)
+//     } finally {
+//         dispatch(setAppStatusAC({status: 'idle'}))
+//     }
+// })
 
 
 export const sendMessageTC = createAsyncThunk(('messages/send'), async (param: SendMessageType, thunkAPI) => {
@@ -44,21 +44,25 @@ const slice = createSlice({
         name: "messages",
         initialState: [] as MessageType[],
         reducers: {
-            changeMessagesStatusAC(state, action: PayloadAction<{ id: number, status: boolean }>) {
-                // const index = state.findIndex(u => u.id === action.payload.id)
-                // state[index].isSelected = action.payload.status
+            fetchMessages(state, action) {
+                return action.payload.data.reverse()
             },
-            changeAllMessagesStatusAC(state, action) {
-                return state.map(u => ({...u, isSelected: action.payload}))
+            newMessage(state, action) {
+                console.log(action.payload.data)
+                return [action.payload.data, ...state]
+                // console.log(action.payload.data)
+            },
+            clearMessages() {
+                return []
             },
         },
         extraReducers: builder => {
-            builder.addCase(fetchMessagesTC.fulfilled, (state, action) => {
-                return action.payload
+            // builder.addCase(fetchMessagesTC.fulfilled, (state, action) => {
+            //     return action.payload
                 // return action.payload.map( m => m)
                 // console.log(action.payload)
                 // return action.payload.users.map(u => ({...u, isSelected: false}))
-            })
+            // })
             // builder.addCase(changeStatusUsersTC.fulfilled, (state, action: PayloadAction<{ value: { ids: number[], status: any } }>) => {
             //     const {ids, status} = action.payload.value;
             //     return state.map(u => ids.includes(u.id) ? {...u, status} : u);
@@ -72,5 +76,5 @@ const slice = createSlice({
 )
 
 export const messagesReducer = slice.reducer;
-export const {changeMessagesStatusAC, changeAllMessagesStatusAC} = slice.actions;
+export const {fetchMessages, clearMessages, newMessage} = slice.actions;
 
