@@ -23,39 +23,35 @@ const MessagesTable = () => {
     const {enqueueSnackbar, closeSnackbar} = useSnackbar();
     const [isInitialFetch, setIsInitialFetch] = useState(false);
 
-
     useEffect(() => {
-        if (ws) {
-            ws.onmessage = (messageEvent: any) => {
-                const messages = JSON.parse(messageEvent.data);
-                if (messages.action === "fetchMessages") {
-                    dispatch(fetchMessages(messages));
-                } else if (messages.action === "sendMessage") {
-                    dispatch(newMessage(messages));
-                    setIsInitialFetch(true)
-                } else if (messages.action === "fetchUsers") {
-                    dispatch(fetchUsers(messages))
-                }
-            };
+        const socket = new WebSocket('wss://websocket-7wwa.onrender.com');
+        socket.onopen = () => {
+            const message = {action: "setUserName", userName};
+            socket.send(JSON.stringify(message));
+            socket.send(JSON.stringify({action: "fetchMessages", userName}));
+            socket.send(JSON.stringify({action: "fetchUsers"}));
+        };
 
-            setTimeout(() => {
-                const message = {action: "setUserName", userName};
-                ws.send(JSON.stringify(message));
-                ws.send(JSON.stringify({action: "fetchMessages", userName}));
-                ws.send(JSON.stringify({action: "fetchUsers"}));
-            }, 100);
-        }
-    }, [ws]);
+        socket.onmessage = (messageEvent: any) => {
+            const messages = JSON.parse(messageEvent.data);
+            if (messages.action === "fetchMessages") {
+                dispatch(fetchMessages(messages));
+            } else if (messages.action === "sendMessage") {
+                dispatch(newMessage(messages));
+                setIsInitialFetch(true)
+            } else if (messages.action === "fetchUsers") {
+                dispatch(fetchUsers(messages))
+            }
+        };
 
-    useEffect(() => {
-        const socket = new WebSocket('ws://localhost:8080');
-        setWS(socket)
+        setWS(socket);
+
         return () => {
             if (ws) {
                 ws.close();
             }
         };
-    }, [])
+    }, []);
 
     useEffect(() => {
         if (!isLoggedIn) navigate(routes.login)

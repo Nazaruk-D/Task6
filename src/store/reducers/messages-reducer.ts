@@ -10,7 +10,6 @@ const slice = createSlice({
                 return action.payload.data.reverse()
             },
             newMessage(state, action) {
-                console.log(action.payload.data)
                 return [action.payload.data, ...state]
             },
             clearMessages() {
