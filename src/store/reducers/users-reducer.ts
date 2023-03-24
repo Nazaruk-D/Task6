@@ -6,7 +6,6 @@ const slice = createSlice({
         initialState: [] as string[],
         reducers: {
             fetchUsers(state, action) {
-                console.log("users: ", action.payload.data)
                 const arr = [] as string[]
                 action.payload.data.map((u: { name: string }) => arr.push(u.name))
                 return arr

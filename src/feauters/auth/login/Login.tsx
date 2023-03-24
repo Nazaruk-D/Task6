@@ -1,15 +1,16 @@
 import React, {useEffect} from 'react';
-import {useAppSelector} from "../../../app/store/store";
-import {routes} from "../../../app/routes/routes";
+import {useAppSelector} from "../../../store/store";
+import {routes} from "../../../routes/routes";
 import {useNavigate} from "react-router-dom";
-import Header from "../../../app/header/Header";
-import ErrorWindow from "../../../common/ErrorWindow/ErrorWindow";
+import ErrorWindow from "../../../common/component/ErrorWindow/ErrorWindow";
 import LoginForm from "./LoginForm/LoginForm";
+import Header from "../../../common/component/Header/Header";
+import {selectorIsLoggedIn} from "../../../store/selector/selectorApp";
 
 
 const Login = () => {
     const navigate = useNavigate()
-    const isLoggedIn = useAppSelector(s => s.auth.isLoggedIn)
+    const isLoggedIn = useAppSelector(selectorIsLoggedIn)
 
     useEffect(() => {
         if (isLoggedIn) navigate(routes.mainPage)

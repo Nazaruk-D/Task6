@@ -1,9 +1,10 @@
 import {AxiosError} from "axios";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {authAPI, LoginDataType, RegistrationDataType} from "../../api/authAPI";
-import {initializeAppTC, setAppStatusAC, setUserName} from "../../app/app-reducer";
+import {authAPI } from "../../api/authAPI";
+import {initializeAppTC, setAppStatusAC, setUserName} from "./app-reducer";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
-import {clearMessages} from "../messagesTable/messages-reducer";
+import {clearMessages} from "./messages-reducer";
+import {LoginDataType, RegistrationDataType} from "../../common/types/AuthType";
 
 
 export const loginTC = createAsyncThunk<undefined, LoginDataType, { rejectValue: { errors: Array<string>, fieldErrors?: Array<any> } }>(('auth/login'), async (param: LoginDataType, thunkAPI) => {

@@ -2,13 +2,13 @@ import React from "react";
 import {Button, FormControl, FormGroup, FormLabel, Grid, Paper, TextField} from "@mui/material";
 import s from "./LoginForm.module.scss"
 import {useFormik} from "formik";
-import {loginTC} from "../../auth-reducer";
-import {useAppDispatch} from "../../../../app/store/store";
-import {useNavigate} from "react-router-dom";
+import {loginTC} from "../../../../store/reducers/auth-reducer";
+import {useAppDispatch} from "../../../../store/store";
+
 
 const LoginForm = () => {
     const dispatch = useAppDispatch()
-    const navigate = useNavigate()
+
     const formik = useFormik({
         initialValues: {
             name: '',
@@ -25,7 +25,6 @@ const LoginForm = () => {
             formik.resetForm()
         },
     })
-
 
     return (
         <Grid container className={s.loginContainer}>
@@ -44,7 +43,8 @@ const LoginForm = () => {
                                 />
                                 {formik.touched.name && formik.errors.name &&
                                     <div style={{color: "red"}}>{formik.errors.name}</div>}
-                                <Button className={s.button} type={'submit'} variant={'contained'} color={'primary'} disabled={!(formik.isValid && formik.dirty)}>
+                                <Button className={s.button} type={'submit'} variant={'contained'} color={'primary'}
+                                        disabled={!(formik.isValid && formik.dirty)}>
                                     Login
                                 </Button>
                             </FormGroup>

@@ -1,4 +1,4 @@
-import {setAppErrorAC, setAppStatusAC} from "../app/app-reducer";
+import {setAppErrorAC, setAppStatusAC} from "../store/reducers/app-reducer";
 import {Dispatch} from "redux";
 
 export const handleServerAppError = (data: any, dispatch: Dispatch) => {

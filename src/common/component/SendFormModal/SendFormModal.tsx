@@ -3,8 +3,8 @@ import {makeStyles} from '@material-ui/core/styles';
 import {Button, Grid, Modal, TextField, Typography,} from '@material-ui/core';
 import {useFormik} from "formik";
 import SendIcon from '@mui/icons-material/Send';
-import {useAppSelector} from "../../app/store/store";
-import {selectorFetchUsersName, selectorNameUser} from "../../app/store/selector/selectorApp";
+import {useAppSelector} from "../../../store/store";
+import {selectorFetchUsersName, selectorNameUser} from "../../../store/selector/selectorApp";
 import {Autocomplete} from "@mui/material";
 
 
@@ -69,7 +69,6 @@ const SendFormModal: FC<SendFormModalPropsType> = ({openModal, setOpenModal, ws}
     })
 
     useEffect(() => {
-        console.log(1)
     }, [formik.values.recipient])
 
     const handleClose = () => {

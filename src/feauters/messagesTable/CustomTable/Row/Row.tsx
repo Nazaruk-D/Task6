@@ -2,13 +2,12 @@ import React from 'react';
 import s from "./Row.module.scss"
 import dateFormat from "dateformat";
 import {Collapse, IconButton, TableCell, TableRow} from "@mui/material";
-import {useAppDispatch} from "../../../../app/store/store";
-import {MessageType} from "../../../../api/messageAPI";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
+import {MessageType} from "../../../../common/types/MessageType";
 
 
 type RowPropsType = {
@@ -16,7 +15,6 @@ type RowPropsType = {
 }
 
 const Row: React.FC<RowPropsType> = ({row}) => {
-    const dispatch = useAppDispatch()
     const [open, setOpen] = React.useState(false);
 
     return (

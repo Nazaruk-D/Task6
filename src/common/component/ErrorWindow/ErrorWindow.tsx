@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import s from "./ErrorWindow.module.scss"
-import {useAppDispatch, useAppSelector} from "../../app/store/store";
-import {setAppErrorAC} from "../../app/app-reducer";
+import {useAppDispatch, useAppSelector} from "../../../store/store";
+import {setAppErrorAC} from "../../../store/reducers/app-reducer";
+import {selectorError} from "../../../store/selector/selectorApp";
 
 const ErrorWindow = () => {
     const dispatch = useAppDispatch()
-    const error = useAppSelector(s => s.app.error)
+    const error = useAppSelector(selectorError)
     const [message, setMessage] = useState("")
 
     useEffect(() => {

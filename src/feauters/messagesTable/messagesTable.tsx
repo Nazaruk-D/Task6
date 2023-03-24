@@ -1,22 +1,22 @@
 import React, {Fragment, useCallback, useEffect, useState} from 'react';
-import {useAppDispatch, useAppSelector} from "../../app/store/store";
+import {useAppDispatch, useAppSelector} from "../../store/store";
 import {useNavigate} from "react-router-dom";
-import Header from "../../app/header/Header";
-import ErrorWindow from "../../common/ErrorWindow/ErrorWindow";
+import ErrorWindow from "../../common/component/ErrorWindow/ErrorWindow";
 import CustomTable from "./CustomTable/CustomTable";
-import {routes} from "../../app/routes/routes";
-import {selectorFetchNewMessage, selectorNameUser} from "../../app/store/selector/selectorApp";
-import {fetchMessages, newMessage} from "./messages-reducer";
-import {fetchUsers} from "../../app/store/users-reducer";
+import {routes} from "../../routes/routes";
+import {selectorFetchNewMessage, selectorIsLoggedIn, selectorNameUser} from "../../store/selector/selectorApp";
+import {fetchMessages, newMessage} from "../../store/reducers/messages-reducer";
+import {fetchUsers} from "../../store/reducers/users-reducer";
 import {useSnackbar} from "notistack";
 import {Button} from "@mui/material";
-import {MessageType} from "../../api/messageAPI";
+import {MessageType} from "../../common/types/MessageType";
+import Header from "../../common/component/Header/Header";
 
 
 const MessagesTable = () => {
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
-    const isLoggedIn = useAppSelector(s => s.auth.isLoggedIn)
+    const isLoggedIn = useAppSelector(selectorIsLoggedIn)
     const userName = useAppSelector(selectorNameUser)
     const lastMessage = useAppSelector(selectorFetchNewMessage)
     const [ws, setWS] = useState<WebSocket | null>(null)
@@ -79,7 +79,6 @@ const MessagesTable = () => {
 
     useEffect(() => {
         if (lastMessage && isInitialFetch) {
-            console.log(lastMessage)
             handleClickWithAction(lastMessage)
         }
     }, [lastMessage, lastMessage, isInitialFetch])

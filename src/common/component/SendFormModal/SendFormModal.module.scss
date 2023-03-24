@@ -1,8 +1,7 @@
+@import './src/common/styles/mixin';
+
 .modalBlock {
-  //@include flex(column, center, center, no-wrap);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  @include flex(column, center, center, wrap);
   height: 100%;
   width: 100%;
   background-color: rgba(0, 0, 0, 0.4);
@@ -13,10 +12,7 @@
   z-index: 1000;
 
   .modalContent {
-    //@include flex(column, center, center, no-wrap);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    @include flex(column, center, center, wrap);
     width: 750px;
     min-height: 200px;
     border-radius: 20px;

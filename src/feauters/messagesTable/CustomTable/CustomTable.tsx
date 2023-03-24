@@ -2,9 +2,9 @@ import React, {FC, useState} from 'react';
 import s from "./CustomTable.module.scss";
 import {Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow} from '@mui/material'
 import Row from "./Row/Row";
-import {useAppDispatch, useAppSelector} from "../../../app/store/store";
+import {useAppDispatch, useAppSelector} from "../../../store/store";
 import Button from "@mui/material/Button";
-import SendFormModal from "../../../common/SendFormModal/SendFormModal";
+import SendFormModal from "../../../common/component/SendFormModal/SendFormModal";
 
 type CustomTablePropsType = {
     ws: WebSocket | null

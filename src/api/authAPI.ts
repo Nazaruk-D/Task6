@@ -1,4 +1,5 @@
 import {instance} from "./instance";
+import {LoginDataType, MeType, RegistrationDataType, UserType} from "../common/types/AuthType";
 
 
 export const authAPI = {
@@ -16,26 +17,9 @@ export const authAPI = {
     },
 }
 
-
 export type ResponseType<D = {}> = {
     statusCode: number
     message: Array<string>
     data: D
 }
 
-export type RegistrationDataType = {
-    name: string
-}
-
-export type LoginDataType = {
-    name: string
-}
-
-export type UserType = {
-    name: string
-    messages: []
-}
-
-export type MeType = {
-    name: string
-}

@@ -5,20 +5,19 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import {useAppDispatch, useAppSelector} from "../store/store";
-import {logoutTC} from "../../feauters/auth/auth-reducer";
+import {useAppDispatch, useAppSelector} from "../../../store/store";
+import {logoutTC} from "../../../store/reducers/auth-reducer";
 import {useNavigate} from "react-router-dom";
-import {routes} from "../routes/routes";
+import {routes} from "../../../routes/routes";
 import {LinearProgress} from "@mui/material";
-import {selectorNameUser} from "../store/selector/selectorApp";
+import {selectorIsLoggedIn, selectorNameUser, selectorStatusApp} from "../../../store/selector/selectorApp";
 
 const Header = () => {
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
-    const isLoggedIn = useAppSelector(s => s.auth.isLoggedIn)
-    const status = useAppSelector(s => s.app.status)
+    const isLoggedIn = useAppSelector(selectorIsLoggedIn)
+    const status = useAppSelector(selectorStatusApp)
     const userName = useAppSelector(selectorNameUser)
-
 
     function onLogoutClickHandler() {
         dispatch(logoutTC())
@@ -36,7 +35,7 @@ const Header = () => {
         <Box sx={{flexGrow: 1}} className={s.headerContainer}>
             <AppBar position="static">
                 <Toolbar>
-                    <Typography variant="h6" component="div" sx={{flexGrow: 1}} onClick={onClickHandler}>
+                    <Typography variant="h6" component="div" sx={{flexGrow: 1, cursor: "pointer"}} onClick={onClickHandler}>
                         Task #6
                     </Typography>
                     {userName && <div style={{marginRight:"40px", fontWeight: 600}}>{userName}</div> }
