@@ -1,6 +1,6 @@
 import React, {FC, useState} from 'react';
 import s from "./CustomTable.module.scss";
-import {Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from '@mui/material'
+import {Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow} from '@mui/material'
 import Row from "./Row/Row";
 import {useAppDispatch, useAppSelector} from "../../../app/store/store";
 import Button from "@mui/material/Button";
@@ -10,10 +10,21 @@ type CustomTablePropsType = {
     ws: WebSocket | null
 }
 
+const MESSAGE_PER_PAGE = 10;
+
+
 const CustomTable: FC<CustomTablePropsType> = ({ws}) => {
     const dispatch = useAppDispatch()
     const messages = useAppSelector(s => s.messages)
     const [openModal, setOpenModal] = useState(false);
+    const [paginationPage, setPaginationPage] = useState(0);
+    const paginationRowsPerPage = MESSAGE_PER_PAGE;
+
+    const handleChangePage = (event: any, newPage: any) => {
+        setPaginationPage(newPage);
+    };
+
+    const slicedMessages = messages.slice(paginationPage * paginationRowsPerPage, paginationPage * paginationRowsPerPage + paginationRowsPerPage);
 
     return (
         <div className={s.tableContainer}>
@@ -42,7 +53,7 @@ const CustomTable: FC<CustomTablePropsType> = ({ws}) => {
                     </TableHead>
                     {messages.length ? (
                         <TableBody>
-                            {messages.map((row) => (
+                            {slicedMessages.map((row) => (
                                 <Row key={row.id} row={row}/>
                             ))}
                         </TableBody>
@@ -59,6 +70,14 @@ const CustomTable: FC<CustomTablePropsType> = ({ws}) => {
                     )}
                 </Table>
             </TableContainer>
+            <TablePagination
+                rowsPerPageOptions={[paginationRowsPerPage]}
+                component="div"
+                count={messages.length}
+                rowsPerPage={paginationRowsPerPage}
+                page={paginationPage}
+                onPageChange={handleChangePage}
+            />
             <SendFormModal openModal={openModal} setOpenModal={setOpenModal} ws={ws}/>
         </div>
     );

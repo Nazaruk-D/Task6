@@ -5,10 +5,13 @@ import {router} from "./routes/routes";
 import {useAppDispatch, useAppSelector} from "./store/store";
 import {initializeAppTC} from "./app-reducer";
 import {CircularProgress} from "@mui/material";
+const {SnackbarProvider} = require('notistack');
+
 
 function App() {
     const dispatch = useAppDispatch()
     const isInitialized = useAppSelector(s => s.app.initialized)
+
 
     useEffect(() => {
         dispatch(initializeAppTC())
@@ -21,11 +24,13 @@ function App() {
         </div>
     }
 
-  return (
-      <div className={s.appContainer}>
-          <RouterProvider router={router}/>
-      </div>
-  );
+    return (
+        <div className={s.appContainer}>
+            <SnackbarProvider maxSnack={3}>
+                <RouterProvider router={router}/>
+            </SnackbarProvider>
+        </div>
+    );
 }
 
 export default App;

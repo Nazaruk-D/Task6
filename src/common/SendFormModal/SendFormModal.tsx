@@ -87,14 +87,20 @@ const SendFormModal: FC<SendFormModalPropsType> = ({openModal, setOpenModal, ws}
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <Autocomplete
-                                {...formik.getFieldProps('recipient')}
                                 options={users}
-                                renderInput={(params) => <TextField {...params}
-                                                                    fullWidth
-                                                                    className={classes.textField}
-                                                                    {...formik.getFieldProps('recipient')}
-                                                                    label="Autocomplete"
-                                                                    variant="outlined"/>}
+                                filterSelectedOptions
+                                value={formik.values.recipient}
+                                onChange={(event, value) => formik.setFieldValue('recipient', value)}
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        fullWidth
+                                        className={classes.textField}
+                                        label="Autocomplete"
+                                        variant="outlined"
+                                        {...formik.getFieldProps('recipient')}
+                                    />
+                                )}
                             />
                             {formik.touched.recipient && formik.errors.recipient &&
                                 <div style={{color: "red"}}>{formik.errors.recipient}</div>}

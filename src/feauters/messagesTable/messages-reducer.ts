@@ -25,20 +25,20 @@ import {messageAPI, MessageType, SendMessageType} from "../../api/messageAPI";
 // })
 
 
-export const sendMessageTC = createAsyncThunk(('messages/send'), async (param: SendMessageType, thunkAPI) => {
-    thunkAPI.dispatch(setAppStatusAC({status: 'loading'}))
-    try {
-        const res = await messageAPI.sendMessages(param)
-        thunkAPI.dispatch(setAppStatusAC({status: 'succeeded'}))
-        return res.data
-    } catch (err: any) {
-        const error: AxiosError = err.response.data
-        handleServerNetworkError(error, thunkAPI.dispatch)
-        return thunkAPI.rejectWithValue({errors: [error.message], fieldErrors: undefined})
-    } finally {
-        thunkAPI.dispatch(setAppStatusAC({status: 'idle'}))
-    }
-})
+// export const sendMessageTC = createAsyncThunk(('messages/send'), async (param: SendMessageType, thunkAPI) => {
+//     thunkAPI.dispatch(setAppStatusAC({status: 'loading'}))
+//     try {
+//         const res = await messageAPI.sendMessages(param)
+//         thunkAPI.dispatch(setAppStatusAC({status: 'succeeded'}))
+//         return res.data
+//     } catch (err: any) {
+//         const error: AxiosError = err.response.data
+//         handleServerNetworkError(error, thunkAPI.dispatch)
+//         return thunkAPI.rejectWithValue({errors: [error.message], fieldErrors: undefined})
+//     } finally {
+//         thunkAPI.dispatch(setAppStatusAC({status: 'idle'}))
+//     }
+// })
 
 const slice = createSlice({
         name: "messages",
@@ -50,7 +50,6 @@ const slice = createSlice({
             newMessage(state, action) {
                 console.log(action.payload.data)
                 return [action.payload.data, ...state]
-                // console.log(action.payload.data)
             },
             clearMessages() {
                 return []
