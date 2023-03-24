@@ -2,8 +2,7 @@ import React from "react";
 import {Button, FormControl, FormGroup, FormLabel, Grid, Paper, TextField} from "@mui/material";
 import s from "./LoginForm.module.scss"
 import {useFormik} from "formik";
-import {loginTC, setIsisRegisteredAC} from "../../auth-reducer";
-import {routes} from "../../../../app/routes/routes";
+import {loginTC} from "../../auth-reducer";
 import {useAppDispatch} from "../../../../app/store/store";
 import {useNavigate} from "react-router-dom";
 
@@ -27,10 +26,6 @@ const LoginForm = () => {
         },
     })
 
-    function onClickHandler() {
-        // dispatch(setIsisRegisteredAC({value: false}))
-        // navigate(routes.registration)
-    }
 
     return (
         <Grid container className={s.loginContainer}>

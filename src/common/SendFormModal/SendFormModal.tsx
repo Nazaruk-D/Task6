@@ -1,11 +1,11 @@
-import React, {FC} from 'react';
+import React, {FC, useEffect} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import {Button, Grid, Modal, TextField, Typography,} from '@material-ui/core';
 import {useFormik} from "formik";
 import SendIcon from '@mui/icons-material/Send';
-import {sendMessageTC} from "../../feauters/messagesTable/messages-reducer";
-import {useAppDispatch, useAppSelector} from "../../app/store/store";
-import {selectorNameUser} from "../../app/store/selector/selectorApp";
+import {useAppSelector} from "../../app/store/store";
+import {selectorFetchUsersName, selectorNameUser} from "../../app/store/selector/selectorApp";
+import {Autocomplete} from "@mui/material";
 
 
 type SendFormModalPropsType = {
@@ -32,30 +32,9 @@ const useStyles = makeStyles((theme: any) => ({
 }));
 
 const SendFormModal: FC<SendFormModalPropsType> = ({openModal, setOpenModal, ws}) => {
-    const dispatch = useAppDispatch()
     const userName = useAppSelector(selectorNameUser)
+    const users = useAppSelector(selectorFetchUsersName)
     const classes = useStyles();
-
-
-    // const [ws, setWS] = useState<any>(null)
-    //
-    // if (ws) {
-    //     ws.onmessage = (messageEvent: any) => {
-    //         // let messages = JSON.parse(messageEvent.data)
-    //         // console.log(messages)
-    //         console.log(messageEvent.data)
-    //     }
-    // }
-    //
-    // useEffect(() => {
-    //     const socket = new WebSocket('ws://localhost:8080');
-    //     setWS(socket)
-    // }, [])
-
-    // const addNewMessageWS = (values: string) => {
-    //     ws.send(values)
-    // }
-
 
     const formik = useFormik({
         initialValues: {
@@ -77,19 +56,21 @@ const SendFormModal: FC<SendFormModalPropsType> = ({openModal, setOpenModal, ws}
             return errors
         },
         onSubmit: values => {
-            // dispatch(sendMessageTC({senderName: userName, recipientName: values.recipient, subject: values.subject, message: values.message}))
-            const newObj = {senderName: userName, recipientName: values.recipient, subject: values.subject, message: values.message}
+            const newObj = {
+                senderName: userName,
+                recipientName: values.recipient,
+                subject: values.subject,
+                message: values.message
+            }
             ws!.send(JSON.stringify({action: 'sendMessage', userName, newObj}))
-            // dispatch(sendMessageTC())
             setOpenModal(false)
             formik.resetForm()
         },
     })
 
-
-    // const handleOpen = () => {
-    //     setOpenModal(true);
-    // };
+    useEffect(() => {
+        console.log(1)
+    }, [formik.values.recipient])
 
     const handleClose = () => {
         setOpenModal(false);
@@ -105,12 +86,15 @@ const SendFormModal: FC<SendFormModalPropsType> = ({openModal, setOpenModal, ws}
                 <form onSubmit={formik.handleSubmit}>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
-                            <TextField
-                                fullWidth
-                                label="Recipient"
-                                variant="outlined"
-                                className={classes.textField}
+                            <Autocomplete
                                 {...formik.getFieldProps('recipient')}
+                                options={users}
+                                renderInput={(params) => <TextField {...params}
+                                                                    fullWidth
+                                                                    className={classes.textField}
+                                                                    {...formik.getFieldProps('recipient')}
+                                                                    label="Autocomplete"
+                                                                    variant="outlined"/>}
                             />
                             {formik.touched.recipient && formik.errors.recipient &&
                                 <div style={{color: "red"}}>{formik.errors.recipient}</div>}

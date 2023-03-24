@@ -5,12 +5,14 @@ import {configureStore} from "@reduxjs/toolkit";
 import {appReducer} from "../app-reducer";
 import {authReducer} from "../../feauters/auth/auth-reducer";
 import {messagesReducer} from "../../feauters/messagesTable/messages-reducer";
+import {usersReducer} from "./users-reducer";
 
 
 const rootReducer = combineReducers({
     app: appReducer,
     auth: authReducer,
     messages: messagesReducer,
+    users: usersReducer,
 })
 
 

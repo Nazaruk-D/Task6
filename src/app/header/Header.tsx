@@ -10,12 +10,15 @@ import {logoutTC} from "../../feauters/auth/auth-reducer";
 import {useNavigate} from "react-router-dom";
 import {routes} from "../routes/routes";
 import {LinearProgress} from "@mui/material";
+import {selectorNameUser} from "../store/selector/selectorApp";
 
 const Header = () => {
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
     const isLoggedIn = useAppSelector(s => s.auth.isLoggedIn)
     const status = useAppSelector(s => s.app.status)
+    const userName = useAppSelector(selectorNameUser)
+
 
     function onLogoutClickHandler() {
         dispatch(logoutTC())
@@ -36,6 +39,7 @@ const Header = () => {
                     <Typography variant="h6" component="div" sx={{flexGrow: 1}} onClick={onClickHandler}>
                         Task #6
                     </Typography>
+                    {userName && <div style={{marginRight:"40px", fontWeight: 600}}>{userName}</div> }
                     {isLoggedIn
                         ? <Button color="inherit" onClick={onLogoutClickHandler}>Logout</Button>
                         : <Button color="inherit" onClick={onLoginClickHandler}>Login</Button>

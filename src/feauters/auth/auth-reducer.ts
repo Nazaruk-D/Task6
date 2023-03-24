@@ -10,15 +10,10 @@ export const loginTC = createAsyncThunk<undefined, LoginDataType, { rejectValue:
     thunkAPI.dispatch(setAppStatusAC({status: 'loading'}))
     try {
         const res = await authAPI.login(param)
-        if (res.statusCode === 200) {
-            thunkAPI.dispatch(initializeAppTC())
-            thunkAPI.dispatch(setUserName({name: res.data.name}))
-            thunkAPI.dispatch(setAppStatusAC({status: 'succeeded'}))
-            return
-        } else {
-            handleServerAppError(res.message, thunkAPI.dispatch)
-            return thunkAPI.rejectWithValue({errors: ["error"], fieldErrors: []})
-        }
+        thunkAPI.dispatch(initializeAppTC())
+        thunkAPI.dispatch(setUserName({name: res.data.name}))
+        thunkAPI.dispatch(setAppStatusAC({status: 'succeeded'}))
+        return
     } catch (err: any) {
         const error: AxiosError = err.response.data
         handleServerNetworkError(error, thunkAPI.dispatch)
@@ -35,6 +30,7 @@ export const logoutTC = createAsyncThunk(('auth/logout'), async (param, thunkAPI
         if (res.statusCode === 200) {
             thunkAPI.dispatch(setIsisRegisteredAC({value: false}))
             thunkAPI.dispatch(clearMessages())
+            thunkAPI.dispatch(setUserName({name: ""}))
             thunkAPI.dispatch(setAppStatusAC({status: 'succeeded'}))
             return
         } else {

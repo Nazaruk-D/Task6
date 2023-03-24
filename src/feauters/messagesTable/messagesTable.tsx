@@ -7,6 +7,7 @@ import CustomTable from "./CustomTable/CustomTable";
 import {routes} from "../../app/routes/routes";
 import {selectorNameUser} from "../../app/store/selector/selectorApp";
 import {fetchMessages, newMessage} from "./messages-reducer";
+import {fetchUsers} from "../../app/store/users-reducer";
 
 
 const MessagesTable = () => {
@@ -20,11 +21,12 @@ const MessagesTable = () => {
         if (ws) {
             ws.onmessage = (messageEvent: any) => {
                 const messages = JSON.parse(messageEvent.data);
-                console.log(messages);
                 if (messages.action === "fetchMessages") {
                     dispatch(fetchMessages(messages));
                 } else if (messages.action === "sendMessage") {
                     dispatch(newMessage(messages));
+                } else if (messages.action === "fetchUsers") {
+                    dispatch(fetchUsers(messages))
                 }
             };
 
@@ -32,6 +34,7 @@ const MessagesTable = () => {
                 const message = {action: "setUserName", userName};
                 ws.send(JSON.stringify(message));
                 ws.send(JSON.stringify({action: "fetchMessages", userName}));
+                ws.send(JSON.stringify({action: "fetchUsers"}));
             }, 100);
         }
     }, [ws]);
