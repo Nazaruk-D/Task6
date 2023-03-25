@@ -18,6 +18,9 @@ const LoginForm = () => {
             if (!values.name) {
                 errors.name = 'Name Required'
             }
+            if (values.name.length > 20) {
+                errors.name = 'Name must not be longer than 20 characters'
+            }
             return errors
         },
         onSubmit: values => {

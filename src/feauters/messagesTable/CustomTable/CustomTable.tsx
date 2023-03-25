@@ -2,25 +2,24 @@ import React, {FC, useState} from 'react';
 import s from "./CustomTable.module.scss";
 import {Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow} from '@mui/material'
 import Row from "./Row/Row";
-import {useAppDispatch, useAppSelector} from "../../../store/store";
+import {useAppSelector} from "../../../store/store";
 import Button from "@mui/material/Button";
 import SendFormModal from "../../../common/component/SendFormModal/SendFormModal";
+import {selectorMessages} from "../../../store/selector/selectorApp";
+import {TableEnum} from "../../../enums/TableEnum";
+
 
 type CustomTablePropsType = {
     ws: WebSocket | null
 }
 
-const MESSAGE_PER_PAGE = 10;
-
-
 const CustomTable: FC<CustomTablePropsType> = ({ws}) => {
-    const dispatch = useAppDispatch()
-    const messages = useAppSelector(s => s.messages)
+    const messages = useAppSelector(selectorMessages)
     const [openModal, setOpenModal] = useState(false);
     const [paginationPage, setPaginationPage] = useState(0);
-    const paginationRowsPerPage = MESSAGE_PER_PAGE;
+    const paginationRowsPerPage = TableEnum.MESSAGE_PER_PAGE;
 
-    const handleChangePage = (event: any, newPage: any) => {
+    const handleChangePage = (event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null, newPage: number) => {
         setPaginationPage(newPage);
     };
 

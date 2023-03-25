@@ -4,7 +4,7 @@ import {authAPI } from "../../api/authAPI";
 import {initializeAppTC, setAppStatusAC, setUserName} from "./app-reducer";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
 import {clearMessages} from "./messages-reducer";
-import {LoginDataType, RegistrationDataType} from "../../common/types/AuthType";
+import {LoginDataType} from "../../common/types/AuthType";
 
 
 export const loginTC = createAsyncThunk<undefined, LoginDataType, { rejectValue: { errors: Array<string>, fieldErrors?: Array<any> } }>(('auth/login'), async (param: LoginDataType, thunkAPI) => {
@@ -44,25 +44,6 @@ export const logoutTC = createAsyncThunk(('auth/logout'), async (param, thunkAPI
     }
 })
 
-export const registrationTC = createAsyncThunk<undefined, RegistrationDataType, { rejectValue: { errors: Array<string>, fieldErrors?: Array<any> } }>(('auth/registration'), async (param: RegistrationDataType, thunkAPI) => {
-    thunkAPI.dispatch(setAppStatusAC({status: 'loading'}))
-    try {
-        const res = await authAPI.registration(param)
-        if (res.statusCode === 201) {
-            thunkAPI.dispatch(setAppStatusAC({status: 'succeeded'}))
-            return
-        } else {
-            handleServerAppError(res.data, thunkAPI.dispatch)
-            return thunkAPI.rejectWithValue({errors: ["error"], fieldErrors: []})
-        }
-    } catch (err: any) {
-        thunkAPI.dispatch(setAppStatusAC({status: 'failed'}))
-        const error: AxiosError = err.response.data
-        handleServerNetworkError(error, thunkAPI.dispatch)
-        return thunkAPI.rejectWithValue({errors: [error.message], fieldErrors: undefined})
-    }
-})
-
 
 const slice = createSlice({
     name: "auth",
@@ -84,9 +65,6 @@ const slice = createSlice({
         })
         builder.addCase(logoutTC.fulfilled, (state) => {
             state.isLoggedIn = false
-        })
-        builder.addCase(registrationTC.fulfilled, (state) => {
-            state.isRegistered = true
         })
     }
 })

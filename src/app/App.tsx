@@ -6,7 +6,6 @@ import {useAppDispatch, useAppSelector} from "../store/store";
 import {initializeAppTC} from "../store/reducers/app-reducer";
 import {CircularProgress} from "@mui/material";
 import {selectorIsInitialized} from "../store/selector/selectorApp";
-
 const {SnackbarProvider} = require('notistack');
 
 

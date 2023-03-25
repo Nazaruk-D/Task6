@@ -2,6 +2,7 @@ import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {authAPI} from "../../api/authAPI";
 import {setIsLoggedInAC} from "./auth-reducer";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
+import {RequestStatusType} from "../../enums/RequestStatusType";
 
 export const initializeAppTC = createAsyncThunk(('app/initializeApp'), async (param, {dispatch}) => {
     try {
@@ -15,7 +16,7 @@ export const initializeAppTC = createAsyncThunk(('app/initializeApp'), async (pa
             handleServerAppError(res.data.message[0], dispatch)
         }
     } catch (err: any) {
-        if (err.request.status === 401){
+        if (err.request.status === 401) {
             return
         } else {
             handleServerNetworkError(err, dispatch)
@@ -28,11 +29,11 @@ export const initializeAppTC = createAsyncThunk(('app/initializeApp'), async (pa
 const slice = createSlice({
     name: "app",
     initialState: {
-        status: 'loading' as RequestStatusType,
+        status: 'loading',
         initialized: false,
-        userName: "" as string,
-        error: null as null | string,
-    },
+        userName: "",
+        error: null,
+    } as InitialStateType,
     reducers: {
         setAppStatusAC(state, action: PayloadAction<{ status: RequestStatusType }>) {
             state.status = action.payload.status
@@ -53,8 +54,13 @@ const slice = createSlice({
 
 export const appReducer = slice.reducer;
 export const {setAppStatusAC, setUserName, setAppErrorAC} = slice.actions;
-export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
 
+type InitialStateType = {
+    status: RequestStatusType
+    initialized: boolean
+    userName: string
+    error: null | string
+}
 
 
 

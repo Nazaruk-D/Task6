@@ -43,7 +43,9 @@ const Row: React.FC<RowPropsType> = ({row}) => {
                             <Table size="small" aria-label="purchases">
                                 <TableBody>
                                     <TableRow>
-                                        <Box sx={{marginTop: 2, marginBottom: 2}}> {row.message}</Box>
+                                        <Box sx={{marginTop: 2, marginBottom: 2}}>
+                                            {row.message}
+                                        </Box>
                                     </TableRow>
                                 </TableBody>
                             </Table>

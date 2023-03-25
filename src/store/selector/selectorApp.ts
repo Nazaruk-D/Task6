@@ -10,4 +10,5 @@ export const selectorIsLoggedIn = (state: AppRootStateType) => state.auth.isLogg
 export const selectorFetchUsersName = (state: AppRootStateType)=> state.users;
 
 export const selectorFetchNewMessage = (state: AppRootStateType)=> state.messages[0];
+export const selectorMessages = (state: AppRootStateType)=> state.messages;
 

@@ -5,7 +5,7 @@ import {useFormik} from "formik";
 import SendIcon from '@mui/icons-material/Send';
 import {useAppSelector} from "../../../store/store";
 import {selectorFetchUsersName, selectorNameUser} from "../../../store/selector/selectorApp";
-import {Autocomplete} from "@mui/material";
+import {Autocomplete, Theme} from "@mui/material";
 
 
 type SendFormModalPropsType = {
@@ -13,23 +13,6 @@ type SendFormModalPropsType = {
     openModal: boolean
     setOpenModal: (openModal: boolean) => void
 }
-
-const useStyles = makeStyles((theme: any) => ({
-    paper: {
-        position: 'absolute',
-        width: 500,
-        backgroundColor: theme.palette.background.paper,
-        boxShadow: theme.shadows[5],
-        padding: theme.spacing(2, 4, 3),
-        outline: 'none',
-    },
-    textField: {
-        marginBottom: theme.spacing(2),
-    },
-    button: {
-        marginTop: theme.spacing(2),
-    },
-}));
 
 const SendFormModal: FC<SendFormModalPropsType> = ({openModal, setOpenModal, ws}) => {
     const userName = useAppSelector(selectorNameUser)
@@ -43,12 +26,21 @@ const SendFormModal: FC<SendFormModalPropsType> = ({openModal, setOpenModal, ws}
             message: '',
         },
         validate: (values) => {
-            const errors: any = {}
+            const errors: ErrorType = {}
             if (!values.recipient) {
                 errors.recipient = 'Recipient Required'
             }
+            if (values.recipient.length > 20) {
+                errors.recipient = 'Name cannot be longer than 20 characters'
+            }
             if (!values.subject) {
                 errors.subject = 'Subject Required'
+            }
+            if (values.subject.length > 40) {
+                errors.subject = 'Subject length must not exceed 40 characters'
+            }
+            if (values.message.length > 140) {
+                errors.message = 'Message length should not exceed 140 characters'
             }
             if (!values.message) {
                 errors.message = 'Message Required'
@@ -76,8 +68,7 @@ const SendFormModal: FC<SendFormModalPropsType> = ({openModal, setOpenModal, ws}
     };
 
     return (
-        <Modal open={openModal} onClose={handleClose}
-               style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
+        <Modal open={openModal} onClose={handleClose} style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
             <div className={classes.paper}>
                 <Typography variant="h5" gutterBottom>
                     Send email form
@@ -147,5 +138,28 @@ const SendFormModal: FC<SendFormModalPropsType> = ({openModal, setOpenModal, ws}
     );
 }
 
-
 export default SendFormModal;
+
+const useStyles = makeStyles((theme: Theme) => ({
+    paper: {
+        position: 'absolute',
+        width: 500,
+        backgroundColor: theme.palette.background.paper,
+        boxShadow: theme.shadows[5],
+        padding: theme.spacing(2, 4, 3),
+        outline: 'none',
+    },
+    textField: {
+        marginBottom: theme.spacing(2),
+    },
+    button: {
+        marginTop: theme.spacing(2),
+    },
+}));
+
+type ErrorType = {
+    recipient?: string
+    subject?: string
+    message?: string
+}
+

@@ -1,9 +1,9 @@
+@import './src/common/styles/mixin';
+
+
 .tableContainer {
+  @include flex(column, center, center, wrap);
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   padding-bottom: 50px;
 
   .toolbarContainer {
@@ -12,17 +12,11 @@
     box-sizing: border-box;
 
     .toolbar {
-      display: flex;
-      flex-direction: row;
-      justify-content: flex-start;
-      align-items: center;
+      @include flex(row, flex-start, center, wrap);
       width: 230px;
-      //background-color: #EFEFEF;
-      //padding: 15px 0;
       border-radius: 5px;
 
       .icon {
-        //margin: 0 10px;
         cursor: pointer;
       }
     }
