@@ -38,32 +38,32 @@ const MessagesTable = () => {
         });
     }, [enqueueSnackbar, closeSnackbar]);
 
-    useEffect(() => {
-        const socket = new WebSocket('wss://websocket2-itvq.onrender.com');
-        socket.onopen = () => {
-            const message = {action: "setUserName", userName};
-            socket.send(JSON.stringify(message));
-            socket.send(JSON.stringify({action: "fetchMessages", userName}));
-            socket.send(JSON.stringify({action: "fetchUsers"}));
-        };
-        socket.onmessage = (messageEvent: any) => {
-            const messages = JSON.parse(messageEvent.data);
-            if (messages.action === "fetchMessages") {
-                dispatch(fetchMessages(messages));
-            } else if (messages.action === "sendMessage") {
-                dispatch(newMessage(messages));
-                setIsInitialFetch(true)
-            } else if (messages.action === "fetchUsers") {
-                dispatch(fetchUsers(messages))
-            }
-        };
-        setWS(socket);
-        return () => {
-            if (ws) {
-                ws.close();
-            }
-        };
-    }, [dispatch]);
+    // useEffect(() => {
+    //     const socket = new WebSocket('wss://websocket2-itvq.onrender.com');
+    //     socket.onopen = () => {
+    //         const message = {action: "setUserName", userName};
+    //         socket.send(JSON.stringify(message));
+    //         socket.send(JSON.stringify({action: "fetchMessages", userName}));
+    //         socket.send(JSON.stringify({action: "fetchUsers"}));
+    //     };
+    //     socket.onmessage = (messageEvent: any) => {
+    //         const messages = JSON.parse(messageEvent.data);
+    //         if (messages.action === "fetchMessages") {
+    //             dispatch(fetchMessages(messages));
+    //         } else if (messages.action === "sendMessage") {
+    //             dispatch(newMessage(messages));
+    //             setIsInitialFetch(true)
+    //         } else if (messages.action === "fetchUsers") {
+    //             dispatch(fetchUsers(messages))
+    //         }
+    //     };
+    //     setWS(socket);
+    //     return () => {
+    //         if (ws) {
+    //             ws.close();
+    //         }
+    //     };
+    // }, [dispatch]);
 
     useEffect(() => {
         if (lastMessage && isInitialFetch) {
