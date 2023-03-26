@@ -38,19 +38,92 @@ const MessagesTable = () => {
         });
     }, [enqueueSnackbar, closeSnackbar]);
 
-    const socket = new WebSocket('wss://websocket2-itvq.onrender.com');
-    useEffect(()=>{
-        if(userName) {
-            socket.onopen = () => {
-                socket.send(JSON.stringify( {action: "setUserName", userName}));
-                socket.send(JSON.stringify({action: "fetchMessages", userName}));
-                socket.send(JSON.stringify({action: "fetchUsers"}));
-            };
-        }
-        },[userName])
+    // const socket = new WebSocket('wss://websocket2-itvq.onrender.com');
+    // useEffect(()=>{
+    //     if(userName) {
+    //         socket.onopen = () => {
+    //             socket.send(JSON.stringify( {action: "setUserName", userName}));
+    //             socket.send(JSON.stringify({action: "fetchMessages", userName}));
+    //             socket.send(JSON.stringify({action: "fetchUsers"}));
+    //         };
+    //     }
+    //     },[userName])
+    //
+    // useEffect(() => {
+    //     socket.onmessage = (messageEvent: any) => {
+    //         const messages = JSON.parse(messageEvent.data);
+    //         if (messages.action === "fetchMessages") {
+    //             dispatch(fetchMessages(messages));
+    //         } else if (messages.action === "sendMessage") {
+    //             dispatch(newMessage(messages));
+    //             setIsInitialFetch(true)
+    //         } else if (messages.action === "fetchUsers") {
+    //             dispatch(fetchUsers(messages))
+    //         }
+    //     };
+    //     setWS(socket);
+    //     return () => {
+    //         if (ws) {
+    //             ws.close();
+    //         }
+    //     };
+    // }, [dispatch]);
+    // const socket = new WebSocket('wss://websocket2-itvq.onrender.com');
+    // setWS(socket)
+    //
+    //
+    // function handleMessage(messageEvent: any) {
+    //     const messages = JSON.parse(messageEvent.data);
+    //     switch (messages.action) {
+    //         case 'fetchMessages':
+    //             dispatch(fetchMessages(messages));
+    //             break;
+    //         case 'sendMessage':
+    //             dispatch(newMessage(messages));
+    //             setIsInitialFetch(true);
+    //             break;
+    //         case 'fetchUsers':
+    //             dispatch(fetchUsers(messages));
+    //             break;
+    //         default:
+    //             break;
+    //     }
+    // }
+    // useEffect(() => {
+    //     if (ws) {
+    //         ws.send(JSON.stringify({ action: 'setUserName', userName }));
+    //         ws.send(JSON.stringify({ action: 'fetchMessages', userName }));
+    //         ws.send(JSON.stringify({ action: 'fetchUsers' }));
+    //
+    //
+    //         ws!.addEventListener('message', handleMessage);
+    //         return () => {
+    //             ws!.removeEventListener('message', handleMessage);
+    //         };
+    //     }
+    // }, [userName]);
 
-    useEffect(() => {
-        socket.onmessage = (messageEvent: any) => {
+
+    function handleMessage(messageEvent: any) {
+        const messages = JSON.parse(messageEvent.data);
+        switch (messages.action) {
+            case 'fetchMessages':
+                dispatch(fetchMessages(messages));
+                break;
+            case 'sendMessage':
+                dispatch(newMessage(messages));
+                setIsInitialFetch(true);
+                break;
+            case 'fetchUsers':
+                dispatch(fetchUsers(messages));
+                break;
+            default:
+                break;
+        }
+    }
+
+    if(ws) {
+        ws.onmessage = (messageEvent: any) => {
             const messages = JSON.parse(messageEvent.data);
             if (messages.action === "fetchMessages") {
                 dispatch(fetchMessages(messages));
@@ -61,13 +134,26 @@ const MessagesTable = () => {
                 dispatch(fetchUsers(messages))
             }
         };
-        setWS(socket);
-        return () => {
-            if (ws) {
-                ws.close();
-            }
-        };
-    }, [dispatch]);
+    }
+
+    useEffect(() => {
+        if (ws) {
+            ws.addEventListener('open', async () => {
+                ws.send(JSON.stringify({ action: 'setUserName', userName }));
+                ws.send(JSON.stringify({ action: 'fetchMessages', userName }));
+                ws.send(JSON.stringify({ action: 'fetchUsers' }));
+            });
+
+            ws.addEventListener('message', handleMessage);
+
+            return () => {
+                ws.removeEventListener('message', handleMessage);
+            };
+        } else {
+            const socket = new WebSocket('wss://websocket2-itvq.onrender.com');
+            setWS(socket);
+        }
+    }, [userName, ws]);
 
     useEffect(() => {
         if (lastMessage && isInitialFetch) {
