@@ -11,6 +11,7 @@ export const loginTC = createAsyncThunk<undefined, LoginDataType, { rejectValue:
     thunkAPI.dispatch(setAppStatusAC({status: 'loading'}))
     try {
         const res = await authAPI.login(param)
+        alert(JSON.stringify(res))
         thunkAPI.dispatch(initializeAppTC())
         thunkAPI.dispatch(setUserName({name: res.data.name}))
         thunkAPI.dispatch(setAppStatusAC({status: 'succeeded'}))

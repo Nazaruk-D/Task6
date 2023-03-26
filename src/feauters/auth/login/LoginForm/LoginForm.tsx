@@ -18,7 +18,7 @@ const LoginForm = () => {
             name: '',
         },
         validate: (values) => {
-            const errors: any = {}
+            const errors: {name?: string} = {}
             if (!values.name) {
                 errors.name = 'Name Required'
             }
@@ -30,7 +30,7 @@ const LoginForm = () => {
         onSubmit: values => {
             dispatch(loginTC(values))
             navigate(routes.mainPage)
-            formik.resetForm()
+            // formik.resetForm()
         },
     })
 
