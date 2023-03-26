@@ -4,10 +4,13 @@ import s from "./LoginForm.module.scss"
 import {useFormik} from "formik";
 import {loginTC} from "../../../../store/reducers/auth-reducer";
 import {useAppDispatch} from "../../../../store/store";
+import {routes} from "../../../../routes/routes";
+import {useNavigate} from "react-router-dom";
 
 
 const LoginForm = () => {
     const dispatch = useAppDispatch()
+    const navigate = useNavigate()
 
     const formik = useFormik({
         initialValues: {
@@ -25,6 +28,7 @@ const LoginForm = () => {
         },
         onSubmit: values => {
             dispatch(loginTC(values))
+            navigate(routes.mainPage)
             formik.resetForm()
         },
     })
