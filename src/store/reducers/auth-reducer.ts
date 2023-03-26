@@ -11,14 +11,16 @@ export const loginTC = createAsyncThunk<undefined, LoginDataType, { rejectValue:
     thunkAPI.dispatch(setAppStatusAC({status: 'loading'}))
     try {
         const res = await authAPI.login(param)
-        // if (res.statusCode === 200 || res.statusCode === 201) {
-            thunkAPI.dispatch(initializeAppTC())
+
+        if (res.statusCode === 200 || res.statusCode === 201) {
+            // thunkAPI.dispatch(initializeAppTC())
             thunkAPI.dispatch(setAppStatusAC({status: 'succeeded'}))
+            thunkAPI.dispatch(setUserName({name: res.data.name}));
             return
-        // } else {
-        //     handleServerAppError(res.message, thunkAPI.dispatch)
-        //     return thunkAPI.rejectWithValue({errors: ["error"], fieldErrors: []})
-        // }
+        } else {
+            handleServerAppError(res.message, thunkAPI.dispatch)
+            return thunkAPI.rejectWithValue({errors: ["error"], fieldErrors: []})
+        }
     } catch (err: any) {
         const error: AxiosError = err.response.data
         handleServerNetworkError(error, thunkAPI.dispatch)
@@ -66,6 +68,9 @@ const slice = createSlice({
     extraReducers: builder => {
         builder.addCase(logoutTC.fulfilled, (state) => {
             state.isLoggedIn = false
+        })
+        builder.addCase(loginTC.fulfilled, (state) => {
+            state.isLoggedIn = true
         })
     }
 })
