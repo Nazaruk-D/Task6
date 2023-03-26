@@ -4,8 +4,8 @@ import MessagesTable from "../feauters/messagesTable/messagesTable";
 import Error404 from "../common/component/Error404/Error404";
 
 export const routes = {
-    mainPage: '/',
-    login: '/login',
+    mainPage: '/Task6/',
+    login: '/Task6/login',
 }
 
 export const router = createBrowserRouter([
