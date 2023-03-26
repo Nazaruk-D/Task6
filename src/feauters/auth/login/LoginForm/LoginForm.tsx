@@ -30,7 +30,7 @@ const LoginForm = () => {
         onSubmit: values => {
             dispatch(loginTC(values))
             navigate(routes.mainPage)
-            // formik.resetForm()
+            formik.resetForm()
         },
     })
 

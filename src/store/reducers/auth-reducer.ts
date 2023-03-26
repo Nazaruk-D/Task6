@@ -1,28 +1,11 @@
 import {AxiosError} from "axios";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {authAPI } from "../../api/authAPI";
+import {authAPI} from "../../api/authAPI";
 import {initializeAppTC, setAppStatusAC, setUserName} from "./app-reducer";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
 import {clearMessages} from "./messages-reducer";
 import {LoginDataType} from "../../common/types/AuthType";
 
-
-// export const loginTC = createAsyncThunk<undefined, LoginDataType, { rejectValue: { errors: Array<string>, fieldErrors?: Array<any> } }>(('auth/login'), async (param: LoginDataType, thunkAPI) => {
-//     thunkAPI.dispatch(setAppStatusAC({status: 'loading'}))
-//     try {
-//         const res = await authAPI.login(param)
-//         thunkAPI.dispatch(initializeAppTC())
-//         thunkAPI.dispatch(setUserName({name: res.data.name}))
-//         thunkAPI.dispatch(setAppStatusAC({status: 'succeeded'}))
-//         return
-//     } catch (err: any) {
-//         const error: AxiosError = err.response.data
-//         handleServerNetworkError(error, thunkAPI.dispatch)
-//         return thunkAPI.rejectWithValue({errors: [error.message], fieldErrors: undefined})
-//     } finally {
-//         thunkAPI.dispatch(setAppStatusAC({status: 'idle'}))
-//     }
-// })
 
 export const loginTC = createAsyncThunk<undefined, LoginDataType, { rejectValue: { errors: Array<string>, fieldErrors?: Array<any> } }>(('auth/login'), async (param: LoginDataType, thunkAPI) => {
     thunkAPI.dispatch(setAppStatusAC({status: 'loading'}))
@@ -30,6 +13,7 @@ export const loginTC = createAsyncThunk<undefined, LoginDataType, { rejectValue:
         const res = await authAPI.login(param)
         if (res.statusCode === 200) {
             thunkAPI.dispatch(initializeAppTC())
+            thunkAPI.dispatch(setUserName({name: res.data.name}))
             thunkAPI.dispatch(setAppStatusAC({status: 'succeeded'}))
             return
         } else {
