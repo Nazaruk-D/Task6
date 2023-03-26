@@ -10,6 +10,7 @@ export const initializeAppTC = createAsyncThunk(('app/initializeApp'), async (pa
         if (res.status === 200) {
             dispatch(setAppStatusAC({status: 'loading'}))
             dispatch(setIsLoggedInAC({value: true}));
+            console.log(res.data.data.name)
             dispatch(setUserName({name: res.data.data.name}));
             return
         } else {
