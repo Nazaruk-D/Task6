@@ -65,6 +65,11 @@ const MessagesTable = () => {
     //     };
     // }, [dispatch]);
 
+
+    const onClickHandler = () => {
+        navigate(routes.test)
+    }
+
     useEffect(() => {
         if (lastMessage && isInitialFetch) {
             handleClickWithAction(lastMessage)
@@ -78,6 +83,7 @@ const MessagesTable = () => {
     return (
         <div>
             <Header/>
+            <Button onClick={onClickHandler}>Test button</Button>
             <CustomTable ws={ws}/>
             <ErrorWindow/>
         </div>
