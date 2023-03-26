@@ -2,6 +2,6 @@ import axios from 'axios'
 
 
 export const instance = axios.create({
-    baseURL: 'https://httpserver-tweb.onrender.com',
+    baseURL: 'https://http-server-emwlfx23r-nazaruk-d.vercel.app',
     withCredentials: true,
 })
