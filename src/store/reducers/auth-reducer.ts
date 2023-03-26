@@ -1,7 +1,7 @@
 import {AxiosError} from "axios";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {authAPI} from "../../api/authAPI";
-import {initializeAppTC, setAppStatusAC, setUserName} from "./app-reducer";
+import {setAppStatusAC, setUserName} from "./app-reducer";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
 import {clearMessages} from "./messages-reducer";
 import {LoginDataType} from "../../common/types/AuthType";
@@ -11,9 +11,7 @@ export const loginTC = createAsyncThunk<undefined, LoginDataType, { rejectValue:
     thunkAPI.dispatch(setAppStatusAC({status: 'loading'}))
     try {
         const res = await authAPI.login(param)
-
         if (res.statusCode === 200 || res.statusCode === 201) {
-            // thunkAPI.dispatch(initializeAppTC())
             thunkAPI.dispatch(setAppStatusAC({status: 'succeeded'}))
             thunkAPI.dispatch(setUserName({name: res.data.name}));
             return

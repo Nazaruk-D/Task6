@@ -39,12 +39,23 @@ const MessagesTable = () => {
     }, [enqueueSnackbar, closeSnackbar]);
 
     useEffect(() => {
+        const socket = new WebSocket('wss://websocket2-itvq.onrender.com');
+        setWS(socket)
+        return () => {
+            if (ws) {
+                ws.close();
+            }
+        };
+    }, [])
+
+    useEffect(() => {
         if (ws) {
             ws.onmessage = (messageEvent: any) => {
                 const messages = JSON.parse(messageEvent.data);
                 if (messages.action === "fetchMessages") {
                     dispatch(fetchMessages(messages));
                 } else if (messages.action === "sendMessage") {
+                    debugger
                     dispatch(newMessage(messages));
                     setIsInitialFetch(true)
                 } else if (messages.action === "fetchUsers") {
@@ -63,23 +74,18 @@ const MessagesTable = () => {
     }, [ws, userName]);
 
     useEffect(() => {
-        const socket = new WebSocket('wss://websocket2-itvq.onrender.com');
-        setWS(socket)
-        return () => {
-            if (ws) {
-                ws.close();
-            }
-        };
-    }, [])
-
-    useEffect(() => {
         if (lastMessage && isInitialFetch) {
             handleClickWithAction(lastMessage)
+            setIsInitialFetch(false)
         }
     }, [lastMessage, isInitialFetch])
 
     useEffect(() => {
         if (!isLoggedIn) navigate(routes.login)
+        if (ws) {
+            setWS(null);
+            ws.close();
+        }
     }, [isLoggedIn, navigate])
 
     return (
