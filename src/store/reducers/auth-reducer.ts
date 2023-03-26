@@ -7,6 +7,23 @@ import {clearMessages} from "./messages-reducer";
 import {LoginDataType} from "../../common/types/AuthType";
 
 
+// export const loginTC = createAsyncThunk<undefined, LoginDataType, { rejectValue: { errors: Array<string>, fieldErrors?: Array<any> } }>(('auth/login'), async (param: LoginDataType, thunkAPI) => {
+//     thunkAPI.dispatch(setAppStatusAC({status: 'loading'}))
+//     try {
+//         const res = await authAPI.login(param)
+//         thunkAPI.dispatch(initializeAppTC())
+//         thunkAPI.dispatch(setUserName({name: res.data.name}))
+//         thunkAPI.dispatch(setAppStatusAC({status: 'succeeded'}))
+//         return
+//     } catch (err: any) {
+//         const error: AxiosError = err.response.data
+//         handleServerNetworkError(error, thunkAPI.dispatch)
+//         return thunkAPI.rejectWithValue({errors: [error.message], fieldErrors: undefined})
+//     } finally {
+//         thunkAPI.dispatch(setAppStatusAC({status: 'idle'}))
+//     }
+// })
+
 export const loginTC = createAsyncThunk<undefined, LoginDataType, { rejectValue: { errors: Array<string>, fieldErrors?: Array<any> } }>(('auth/login'), async (param: LoginDataType, thunkAPI) => {
     thunkAPI.dispatch(setAppStatusAC({status: 'loading'}))
     try {
