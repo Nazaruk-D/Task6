@@ -12,9 +12,9 @@ export const loginTC = createAsyncThunk<undefined, LoginDataType, { rejectValue:
     try {
         const res = await authAPI.login(param)
         if (res.statusCode === 200) {
+            const name = res.data.name
             thunkAPI.dispatch(initializeAppTC())
-            await thunkAPI.dispatch(setUserName({name: res.data.name}))
-            // thunkAPI.dispatch(setUserName({name: res.data.name}))
+            thunkAPI.dispatch(setUserName({name}))
             thunkAPI.dispatch(setAppStatusAC({status: 'succeeded'}))
             return
         } else {
