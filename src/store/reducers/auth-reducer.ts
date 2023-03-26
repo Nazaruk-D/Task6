@@ -11,15 +11,14 @@ export const loginTC = createAsyncThunk<undefined, LoginDataType, { rejectValue:
     thunkAPI.dispatch(setAppStatusAC({status: 'loading'}))
     try {
         const res = await authAPI.login(param)
-        console.log(res.statusCode)
-        if (res.statusCode === 200 || res.statusCode === 201) {
+        // if (res.statusCode === 200 || res.statusCode === 201) {
             thunkAPI.dispatch(initializeAppTC())
             thunkAPI.dispatch(setAppStatusAC({status: 'succeeded'}))
             return
-        } else {
-            handleServerAppError(res.message, thunkAPI.dispatch)
-            return thunkAPI.rejectWithValue({errors: ["error"], fieldErrors: []})
-        }
+        // } else {
+        //     handleServerAppError(res.message, thunkAPI.dispatch)
+        //     return thunkAPI.rejectWithValue({errors: ["error"], fieldErrors: []})
+        // }
     } catch (err: any) {
         const error: AxiosError = err.response.data
         handleServerNetworkError(error, thunkAPI.dispatch)

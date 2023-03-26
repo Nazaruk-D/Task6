@@ -13,7 +13,6 @@ const Login = () => {
     const isLoggedIn = useAppSelector(selectorIsLoggedIn)
 
     useEffect(() => {
-        console.log(isLoggedIn)
         if (isLoggedIn) navigate(routes.mainPage)
     }, [isLoggedIn, navigate])
 
