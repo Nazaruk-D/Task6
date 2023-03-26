@@ -11,10 +11,9 @@ export const loginTC = createAsyncThunk<undefined, LoginDataType, { rejectValue:
     thunkAPI.dispatch(setAppStatusAC({status: 'loading'}))
     try {
         const res = await authAPI.login(param)
-        if (res.statusCode === 200) {
+        console.log(res.statusCode)
+        if (res.statusCode === 200 || res.statusCode === 201) {
             thunkAPI.dispatch(initializeAppTC())
-            // thunkAPI.dispatch(setUserName({name: res.data.name}))
-            // thunkAPI.dispatch(initializeAppTC())
             thunkAPI.dispatch(setAppStatusAC({status: 'succeeded'}))
             return
         } else {
@@ -63,12 +62,9 @@ const slice = createSlice({
         },
         setIsisRegisteredAC(state, action: PayloadAction<{ value: boolean }>) {
             state.isRegistered = action.payload.value
-        }
+        },
     },
     extraReducers: builder => {
-        builder.addCase(loginTC.fulfilled, (state) => {
-            state.isLoggedIn = true
-        })
         builder.addCase(logoutTC.fulfilled, (state) => {
             state.isLoggedIn = false
         })
