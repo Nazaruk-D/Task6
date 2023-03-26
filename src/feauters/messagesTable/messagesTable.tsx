@@ -63,7 +63,7 @@ const MessagesTable = () => {
                 ws.close();
             }
         };
-    }, [dispatch]);
+    }, [userName, dispatch]);
 
     useEffect(() => {
         if (lastMessage && isInitialFetch) {
