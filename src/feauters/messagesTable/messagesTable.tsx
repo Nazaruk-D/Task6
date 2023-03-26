@@ -38,14 +38,18 @@ const MessagesTable = () => {
         });
     }, [enqueueSnackbar, closeSnackbar]);
 
+    const socket = new WebSocket('wss://websocket2-itvq.onrender.com');
+    useEffect(()=>{
+        if(userName) {
+            socket.onopen = () => {
+                socket.send(JSON.stringify( {action: "setUserName", userName}));
+                socket.send(JSON.stringify({action: "fetchMessages", userName}));
+                socket.send(JSON.stringify({action: "fetchUsers"}));
+            };
+        }
+        },[userName])
+
     useEffect(() => {
-        const socket = new WebSocket('wss://websocket2-itvq.onrender.com');
-        socket.onopen = () => {
-            const message = {action: "setUserName", userName};
-            socket.send(JSON.stringify(message));
-            socket.send(JSON.stringify({action: "fetchMessages", userName}));
-            socket.send(JSON.stringify({action: "fetchUsers"}));
-        };
         socket.onmessage = (messageEvent: any) => {
             const messages = JSON.parse(messageEvent.data);
             if (messages.action === "fetchMessages") {
@@ -63,7 +67,7 @@ const MessagesTable = () => {
                 ws.close();
             }
         };
-    }, [userName, dispatch]);
+    }, [dispatch]);
 
     useEffect(() => {
         if (lastMessage && isInitialFetch) {
